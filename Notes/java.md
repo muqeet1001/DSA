@@ -342,3 +342,241 @@ Example:
 **Time Complexity tells us how an algorithm scales with input size, not how fast it runs on a machine.**
 
 ---
+# Arrays in Java – Clean & Clear Notes
+
+---
+
+## 1. Why We Need Arrays
+
+- A variable can store **only one value**
+- If we need to store **many values of the same type** (e.g., 500 roll numbers), creating separate variables is not practical
+- **Arrays** solve this problem by storing a **collection of values of the same type** under one name
+
+---
+
+## 2. What is an Array?
+
+- An **array** is a collection of elements
+- All elements must be of the **same data type**
+- Arrays can store:
+  - **Primitive types** → `int`, `float`, `boolean`, etc.
+  - **Non-primitive (object) types** → `String`, custom objects, etc.
+
+---
+
+## 3. Array Syntax in Java
+
+```java
+int[] arr = new int[5];          // declaration + initialization
+int[] arr2 = {1, 2, 3, 4, 5};    // direct initialization
+```
+
+**Explanation:**
+- `int[]` → data type of the array
+- `arr` → reference variable
+- `new` → creates an object
+- `5` → fixed size of the array
+
+---
+
+## 4. Memory Management of Arrays (VERY IMPORTANT)
+
+### Common Rule (Applies to ALL arrays)
+- **Reference variable** → stored in Stack
+- **Array object** → stored in Heap
+- Java uses **dynamic memory allocation** (memory created at runtime)
+
+### Primitive Array (int[])
+
+```java
+int[] arr = new int[3];
+```
+
+- The array object stores actual primitive values
+- Default value for int elements → `0`
+- Only one heap object is involved
+
+**Memory idea:**
+```
+Stack → arr
+Heap  → [0 | 0 | 0]
+```
+
+### Object Array (String[])
+
+```java
+String[] arr = new String[3];
+```
+
+- The array object stores references, not actual objects
+- Default value for each element → `null`
+- Actual objects (String) are stored separately in heap
+- Objects can be anywhere in heap
+
+**Memory idea:**
+```
+Stack → arr
+Heap  → [ref | ref | null]
+           ↓
+         "Hello"
+```
+
+### Key Difference (CORE CONCEPT)
+
+| Feature | Primitive Array | Object Array |
+|---------|-----------------|--------------|
+| Stores | values directly | references |
+| Extra objects | No | Yes |
+| Heap levels | One | Two |
+| Performance | Faster & memory efficient | More flexible, more memory |
+
+**Remember:** Primitive arrays store values inside the array object, Object arrays store references to separate objects.
+
+---
+
+## 5. Array Indexing
+
+- Index starts from `0`
+- Last index = `size - 1`
+
+```java
+arr[0] = 10;
+System.out.println(arr[2]);
+```
+
+---
+
+## 6. Input & Output of Arrays
+
+### Using a for loop
+```java
+for (int i = 0; i < arr.length; i++) {
+    arr[i] = input;
+}
+```
+
+### Enhanced for-loop
+```java
+for (int num : arr) {
+    System.out.println(num);
+}
+```
+
+### Using Arrays.toString()
+```java
+System.out.println(Arrays.toString(arr));
+```
+
+---
+
+## 7. Passing Arrays to Functions
+
+- Java is **call by value**
+- When arrays are passed, a **copy of the reference** is passed
+- Both references point to the **same array object**
+- Changes inside a function **affect the original array**
+- Arrays are **mutable**
+
+---
+
+## 8. 2D Arrays (Multidimensional Arrays)
+
+A 2D array is an **array of arrays**
+
+```java
+int[][] arr = new int[3][3];
+```
+
+### Rules
+- Number of rows is **mandatory**
+- Number of columns is **optional**
+- Java supports **jagged arrays**
+
+**Memory concept:**
+- Main array → references
+- Each row → separate array object in heap
+
+---
+
+## 9. Input & Output of 2D Arrays
+
+### Input
+```java
+for (int row = 0; row < arr.length; row++) {
+    for (int col = 0; col < arr[row].length; col++) {
+        arr[row][col] = input;
+    }
+}
+```
+
+### Output
+```java
+System.out.println(Arrays.toString(arr[row]));
+```
+
+---
+
+## 10. Common Array Problems
+
+- Swap elements
+- Find maximum element
+- Find maximum in a given range
+- Reverse an array (two-pointer method)
+
+---
+
+## 11. ArrayList (Dynamic Array)
+
+Used when size is unknown. Part of Java Collection Framework.
+
+```java
+ArrayList<Integer> list = new ArrayList<>();
+```
+
+### Features
+- Dynamic size
+- Stores objects only
+- Uses wrapper classes (Integer, not int)
+
+### Common Methods
+- `add()`
+- `get()`
+- `set()`
+- `remove()`
+- `contains()`
+
+---
+
+## 12. Internal Working of ArrayList
+
+- Internally uses an array
+- When capacity is full:
+  - A new larger array is created
+  - Old elements are copied
+- Insertion has amortized **O(1)** time complexity
+
+---
+
+## 13. Multi-dimensional ArrayList
+
+```java
+ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+```
+
+- Inner lists must be initialized first
+- Works like 2D arrays but dynamic
+
+---
+
+## Final Takeaway
+
+- **Arrays** → fixed size, fast, memory efficient
+- **ArrayList** → dynamic size, flexible, slightly slower
+- Java arrays are objects stored in heap
+- Primitive arrays store values
+- Object arrays store references
+
+### ⭐ Interview One-Liner:
+
+**Primitive arrays store values directly, whereas object arrays store references to objects in heap.**
+
