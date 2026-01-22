@@ -211,6 +211,7 @@ package com.example.demo;
 - Type casting converts data types
 
 ---
+<<<<<<< HEAD
 
 ## 18. Lecture Summary: Time & Space Complexity (Complete Overview)
 
@@ -580,3 +581,5 @@ ArrayList<ArrayList<Integer>> list = new ArrayList<>();
 
 **Primitive arrays store values directly, whereas object arrays store references to objects in heap.**
 
+=======
+>>>>>>> 74f3a0723b5b6cf5b166aac2a82b32bc7b6819b8
