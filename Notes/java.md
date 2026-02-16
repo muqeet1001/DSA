@@ -581,5 +581,616 @@ ArrayList<ArrayList<Integer>> list = new ArrayList<>();
 
 **Primitive arrays store values directly, whereas object arrays store references to objects in heap.**
 
-=======
->>>>>>> 74f3a0723b5b6cf5b166aac2a82b32bc7b6819b8
+---
+
+# Strings in Java – Complete Revision Notes
+
+---
+
+## 1️⃣ What is a String?
+
+- A **String** is a **sequence of characters**
+- In Java, **String is a class**, not a primitive
+- Every string you create is an **object**
+
+```java
+String name = "Kunal";
+```
+
+**Memory Layout:**
+```
+Stack  → name (reference variable)
+            ↓
+Heap   → "Kunal" (actual object)
+```
+
+---
+
+## 2️⃣ Stack vs Heap (Strings)
+
+| Component | Details |
+|-----------|---------|
+| **Stack** | Stores reference variables (fast access) |
+| **Heap** | Stores actual string objects (shared memory) |
+
+```java
+String a = "Hello";
+
+a → stack
+"Hello" → heap
+```
+
+---
+
+## 3️⃣ String Pool (Memory Optimization) 🔥
+
+A **special memory area inside heap** that stores **unique string literals**.
+
+### Example:
+```java
+String a = "Kunal";
+String b = "Kunal";
+```
+
+**What happens?**
+1. Java checks the String Pool
+2. "Kunal" already exists → reused
+3. **Only ONE object created**
+
+**Memory:**
+```
+a ─┐
+   ├──> "Kunal" (String Pool)
+b ─┘
+```
+
+### Why String Pool?
+- **Saves memory** → No duplicate objects
+- **Improves performance** → Reuses existing objects
+- **Efficient** → Optimal use of heap
+
+---
+
+## 4️⃣ String Immutability (Core Concept) 🔥
+
+### Meaning:
+Once a String object is created, it **CANNOT be changed**.
+
+### Example:
+```java
+String s = "Kunal";
+s = "Kushwaha";
+```
+
+**What really happens?**
+```
+"Kunal" → stays unchanged in memory
+New object "Kushwaha" created
+s now points to new object
+Old object → garbage collected
+```
+
+**❌ String NOT modified**  
+**✅ Reference changed**
+
+---
+
+## 5️⃣ Why Strings are Immutable?
+
+### Main Reasons:
+
+#### 1. **Security**
+- Passwords, usernames, URLs must not change
+- If mutable → hackers could modify them
+
+#### 2. **String Pool Safety**
+- One object shared by many references
+- If mutable → one change affects all → catastrophic!
+
+#### 3. **Thread Safety**
+- Multiple threads can safely share strings
+- No accidental modification by other threads
+
+#### 4. **HashMap Keys**
+- Hash depends on immutability
+- Mutable keys would break the map
+
+**Example (Why Immutability Matters):**
+```java
+// If 100 users have name "Kunal"
+// If String was mutable:
+String shared = "Kunal";
+
+// If someone changes it:
+shared = "Hacker";
+
+// All 100 users now have name "Hacker" ❌ DISASTER
+```
+
+---
+
+## 6️⃣ String Comparison (Very Important) 🔥
+
+### ❌ Using `==` (Wrong for comparison)
+```java
+a == b
+```
+- Compares **references** (memory addresses)
+- Checks: Are both pointing to **same object**?
+- Not useful for string content comparison
+
+### ✅ Using `.equals()` (Correct for comparison)
+```java
+a.equals(b)
+```
+- Compares **values (content)**
+- Checks: Do both strings have **same content**?
+
+### Case 1: String Literals
+```java
+String a = "Kunal";
+String b = "Kunal";
+
+a == b        // true  (both point to same pool object)
+a.equals(b)  // true  (content is same)
+```
+
+### Case 2: Using `new` Keyword
+```java
+String a = new String("Kunal");
+String b = new String("Kunal");
+
+a == b        // false  (different objects in heap)
+a.equals(b)  // true   (content is same)
+```
+
+### Rule:
+| Operator | Purpose |
+|----------|---------|
+| `==` | Reference check (memory address) |
+| `.equals()` | Value/content check (always use this) |
+
+---
+
+## 7️⃣ `new String()` Keyword
+
+The `new` keyword **forces** Java to create a new object in heap.
+
+```java
+String s = new String("Kunal");
+```
+
+**Effect:**
+- Bypasses String Pool
+- New object created **outside** pool (in regular heap)
+- ❌ Not recommended for normal use
+- ✅ Used only when explicitly required
+
+---
+
+## 8️⃣ Common String Methods
+
+### Length & Access
+```java
+s.length()           // returns number of characters
+s.charAt(index)      // returns character at index
+```
+
+### Case Conversion
+```java
+s.toLowerCase()      // converts to lowercase
+s.toUpperCase()      // converts to uppercase
+```
+
+### Searching
+```java
+s.indexOf('a')       // first occurrence of 'a'
+s.lastIndexOf('a')   // last occurrence of 'a'
+```
+
+### Trimming
+```java
+s.trim()             // removes leading & trailing spaces
+s.strip()            // Unicode-aware (preferred)
+```
+
+### Splitting
+```java
+String[] arr = s.split(" ");  // splits by space
+```
+
+### Important Point:
+📌 **All methods return a NEW String**  
+📌 **Original string remains UNCHANGED** (immutability)
+
+---
+
+## 9️⃣ String Concatenation (+ Operator)
+
+```java
+String a = "Hello";
+String b = "World";
+a + b   // "HelloWorld"
+```
+
+### Rules:
+- `+` is **overloaded** for String
+- If **any operand is String** → result is String
+
+```java
+"A" + 1      → "A1"
+"A" + true   → "Atrue"
+1 + 2        → 3 (still int)
+```
+
+### Important:
+- `+` works with **primitives** (auto-converts)
+- For **objects** → calls `toString()`
+
+---
+
+## 🔟 How `System.out.println()` Works
+
+```java
+System.out.println(obj);
+```
+
+**Internally:**
+1. Calls `String.valueOf(obj)`
+2. Calls `obj.toString()`
+3. Prints the returned String
+4. If `obj == null` → prints `"null"`
+
+---
+
+## 1️⃣1️⃣ Performance Problem: String Concatenation in Loops 🔥
+
+### Bad Code (❌ SLOW):
+```java
+String s = "";
+for(int i = 0; i < n; i++) {
+    s = s + i;
+}
+```
+
+### Problem:
+- String is **immutable**
+- **New object created every iteration**
+- Old data **copied again & again**
+- Total operations → **O(n²)** Time
+- **Wasteful memory usage**
+
+### Why Slow?
+```
+Iteration 1: "" + 0        → "0"    (copy 0 chars, add 1)
+Iteration 2: "0" + 1       → "01"   (copy 1 char, add 1)
+Iteration 3: "01" + 2      → "012"  (copy 2 chars, add 1)
+...
+Total copies = 1+2+3+...+n = n²
+```
+
+---
+
+## 1️⃣2️⃣ StringBuilder (Solution for Performance) 🔥
+
+**What is StringBuilder?**  
+A class that provides a **mutable string** for efficient building.
+
+### Syntax:
+```java
+StringBuilder sb = new StringBuilder();
+sb.append("Hello");
+sb.append("World");
+String result = sb.toString();
+```
+
+### Properties:
+- ✅ **Mutable** (can change without creating new objects)
+- ✅ **Efficient** → Same object modified internally
+- ✅ **Uses char array** internally (similar to ArrayList)
+
+### Time Complexity:
+- **Time** → **O(n)** ✅ (much better than O(n²))
+- **Memory** → **Efficient** ✅
+
+### Correct Approach:
+```java
+StringBuilder sb = new StringBuilder();
+for(int i = 0; i < n; i++) {
+    sb.append(i);
+}
+String result = sb.toString();
+```
+
+---
+
+## 1️⃣3️⃣ String vs StringBuilder Comparison
+
+| Feature | String | StringBuilder |
+|---------|--------|---------------|
+| **Mutable?** | ❌ No | ✅ Yes |
+| **Performance in loops** | ❌ Slow (O(n²)) | ✅ Fast (O(n)) |
+| **Thread-safe?** | ✅ Yes | ❌ No |
+| **Memory usage** | ❌ More waste | ✅ Efficient |
+| **Use case** | Constants, fixed text | Building, loops |
+
+---
+
+## 1️⃣4️⃣ When to Use What?
+
+### Use **String** when:
+- Text is **fixed/constant**
+- Working with **immutable data** (passwords, keys)
+- Using as **HashMap keys**
+- Text **won't change**
+
+### Use **StringBuilder** when:
+- Building strings in **loops**
+- Large **concatenation** operations
+- **Dynamic text** building
+- Frequent **append** operations
+
+---
+
+## 1️⃣5️⃣ Palindrome Problem (Classic Pattern) 📌
+
+### Definition:
+A string that reads the **same left→right** and **right→left**.
+
+### Examples:
+- "racecar" ✅
+- "hello" ❌
+
+### Solution Logic:
+- Use **two pointers**: `start` at beginning, `end` at end
+- Compare characters: `s.charAt(i) == s.charAt(n-1-i)`
+- Move inward and check
+- One mismatch → return `false`
+
+### Code Idea:
+```java
+for(int i = 0; i < str.length() / 2; i++) {
+    if(str.charAt(i) != str.charAt(n - i - 1))
+        return false;
+}
+return true;
+```
+
+### Complexity:
+- **Time** → **O(n)**
+- **Space** → **O(1)** (no extra space)
+
+---
+
+## 🎯 StringBuffer vs StringBuilder
+
+| Feature | StringBuilder | StringBuffer |
+|---------|---------------|--------------|
+| **Mutable?** | ✅ Yes | ✅ Yes |
+| **Thread-safe?** | ❌ No | ✅ Yes (synchronized) |
+| **Speed** | ⚡ Fast | 🐢 Slower |
+| **Synchronization** | No overhead | Has overhead |
+
+**Which to use?**
+- **StringBuilder** → Most code is single-threaded (95% of cases)
+- **StringBuffer** → Multi-threaded programs only
+
+---
+
+## 1️⃣6️⃣ Interview Questions & Answers
+
+### Q1: Why is String immutable but StringBuilder mutable?
+
+**Answer:**
+- **String immutable** → for security, memory optimization, hashCode safety, thread-safety
+- **Strings shared** in String Pool → if mutable, one change affects all references
+- **StringBuilder mutable** → not shared, designed purely for performance
+
+**One-liner:** *"String is immutable for safety and sharing; StringBuilder is mutable for performance."*
+
+---
+
+### Q2: How does Java optimize compile-time string concatenation?
+
+```java
+String s = "a" + "b" + "c";
+```
+
+**Answer:**
+- This is a **compile-time constant**
+- JVM optimizes it **at compile time** to: `String s = "abc";`
+- Only **one object created** in String Pool
+
+**Compare with:**
+```java
+String a = "a";
+String s = a + "b";  // Runtime → uses StringBuilder
+```
+- Cannot optimize at compile time (variable `a`)
+- JVM uses StringBuilder internally
+
+---
+
+### Q3: What is the output?
+
+```java
+String a = "hello";
+String b = "hello";
+String c = new String("hello");
+
+System.out.println(a == b);        // ?
+System.out.println(a == c);        // ?
+System.out.println(a.equals(c));   // ?
+```
+
+**Answer:**
+```
+true   // a and b point to same pool object
+false  // c is a different object
+true   // .equals() compares values
+```
+
+---
+
+### Q4: How many objects are created?
+
+```java
+String s = new String("hello");
+```
+
+**Answer:** **2 objects**
+
+**Why?**
+1. "hello" → created in **String Pool**
+2. new String() → created in **Heap** (outside pool)
+
+---
+
+### Q5: Why are Strings safe as HashMap keys?
+
+**Answer:**
+- HashMap uses `hashCode()` for lookups
+- **HashCode must NOT change** after insertion
+- String is immutable → hash remains **same forever**
+- Mutable key would break the map structure
+
+**One-liner:** *"Strings are immutable, so their hashCode never changes, making them safe HashMap keys."*
+
+---
+
+### Q6: Why is this code slow?
+
+```java
+String s = "";
+for(int i = 0; i < 100000; i++) {
+    s += i;
+}
+```
+
+**Answer:**
+- String is immutable → each `+` creates new object
+- Old content **copied again & again**
+- Total operations → **O(n²)**
+
+**Solution:**
+```java
+StringBuilder sb = new StringBuilder();
+for(int i = 0; i < 100000; i++) {
+    sb.append(i);
+}
+String result = sb.toString();  // O(n) ✅
+```
+
+---
+
+### Q7: Can we create immutable classes like String?
+
+**Answer:** **Yes!** Follow these rules:
+
+1. Class must be `final` (no inheritance)
+2. All fields must be `private` and `final`
+3. No setters (only getters)
+4. Defensive copying for mutable fields
+
+```java
+final class MyImmutable {
+    private final int x;
+    private final String name;
+    
+    public MyImmutable(int x, String name) {
+        this.x = x;
+        this.name = new String(name);  // defensive copy
+    }
+}
+```
+
+---
+
+### Q8: Why use `char[]` instead of `String` for passwords?
+
+**Answer:**
+- **Strings immutable** → remain in heap until garbage collection (days!)
+- **char[] can be manually cleared:** `Arrays.fill(password, '\0')`
+- After clearing → no trace of password in memory
+
+**Security advantage:**
+```java
+char[] password = {'P', 'w', 'd'};
+// After use:
+Arrays.fill(password, '\0');  // password == {'0', '0', '0'} ✅
+```
+
+---
+
+### Q9: Output?
+
+```java
+String s1 = "java";
+String s2 = s1;
+s1 = "python";
+
+System.out.println(s2);  // ?
+```
+
+**Answer:** `java`
+
+**Explanation:**
+- s1 reassigned to "python"
+- s2 still points to old "java" object
+- **Immutability in action** ✅
+
+---
+
+### Q10: Output?
+
+```java
+String s = "A" + 10 + 20;
+System.out.println(s);  // ?
+```
+
+**Answer:** `"A1020"`
+
+**Evaluation (left to right):**
+```
+"A" + 10      → "A10"
+"A10" + 20    → "A1020"
+```
+
+---
+
+## 📊 Time Complexity Summary
+
+| Operation | Time Complexity |
+|-----------|-----------------|
+| String concatenation (`+`) in loop | **O(n²)** ❌ |
+| StringBuilder append | **O(n)** ✅ |
+| String equality check | **O(n)** |
+| charAt() | **O(1)** |
+| indexOf() | **O(n)** |
+
+---
+
+## ✅ Final One-Liners (Interview Killers 🔥)
+
+1. *"String is immutable for security and sharing"*
+2. *"String Pool avoids duplicate literals"*
+3. *"Use equals() for string comparison, never =="*
+4. *"StringBuilder avoids O(n²) concatenation"*
+5. *"Immutability makes String thread-safe"*
+6. *"HashMap keys must be immutable (String is ideal)"*
+7. *"String is immutable; StringBuilder is mutable"*
+
+---
+
+## 🎓 Quick 5-Minute Interview Revision
+
+- **What's immutable?** → String (once created, never changes)
+- **Why immutable?** → Security, pool safety, thread-safe, HashMap keys
+- **String Pool?** → Special heap area storing unique literals
+- **== vs equals()?** → References vs values
+- **When StringBuilder?** → Loops, large concatenations
+- **Why slow concatenation?** → New object creation every time (O(n²))
+
+---
+
+
